@@ -1,0 +1,37 @@
+{
+  "name": "learner",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Learner: Cognitive learning surface and domain pack built on Episteme.",
+  "type": "module",
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -b --force",
+    "pretest": "tsc -b --force",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "learn": "pnpm --filter @episteme/app-learn learn",
+    "learn:web": "pnpm --filter @episteme/app-learn serve",
+    "check": "pnpm typecheck && pnpm lint && pnpm build && pnpm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.16.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.1.8"
+  }
+}

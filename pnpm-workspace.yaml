@@ -1,0 +1,15 @@
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - 'tests'
+
+allowBuilds:
+  esbuild: true
+
+overrides:
+  '@episteme/agent': 'link:../Episteme/packages/agent'
+  '@episteme/core': 'link:../Episteme/packages/core'
+  '@episteme/embeddings-http': 'link:../Episteme/packages/embeddings-http'
+  '@episteme/sdk': 'link:../Episteme/packages/sdk'
+  '@episteme/storage-local': 'link:../Episteme/packages/storage-local'
+  '@episteme/storage-memory': 'link:../Episteme/packages/storage-memory'
