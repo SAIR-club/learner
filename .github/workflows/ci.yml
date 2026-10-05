@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout learner
+        uses: actions/checkout@v4
+        with:
+          path: learner
+
+      - name: Checkout Episteme substrate
+        uses: actions/checkout@v4
+        with:
+          repository: SAIR-club/Episteme
+          path: Episteme
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          cache-dependency-path: learner/pnpm-lock.yaml
+
+      - name: Build Episteme substrate
+        working-directory: Episteme
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Install learner dependencies
+        working-directory: learner
+        run: pnpm install --frozen-lockfile
+
+      - name: Run learner verification
+        working-directory: learner
+        run: pnpm check
