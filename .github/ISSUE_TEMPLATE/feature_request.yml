@@ -1,0 +1,29 @@
+name: Feature Request
+description: Suggest an enhancement or new feature for the learner application
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Suggest an improvement for the interactive learning surface, CLI, or domain-learn pack.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: What inquiry or learner experience does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: Detailed description of the feature or UX.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative approaches considered.
+    validations:
+      required: false

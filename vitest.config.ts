@@ -5,5 +5,11 @@ export default defineConfig({
     include: ['packages/*/test/**/*.test.ts', 'tests/**/*.test.ts'],
     environment: 'node',
     passWithNoTests: false,
+    poolOptions: {
+      forks: {
+        minForks: 1,
+        maxForks: 4,
+      },
+    },
   },
 })
