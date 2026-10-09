@@ -1,13 +1,17 @@
 {
   "name": "@episteme/domain-learn",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Learn domain pack: vocabulary, guards and hybrid retrieval for the Learn scene.",
+  "description": "Learn domain pack: the vocabulary and rules of the Learn scene, registered into Core without changing it.",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./distillation": {
+      "types": "./dist/distillation.d.ts",
+      "default": "./dist/distillation.js"
     }
   },
   "main": "./dist/index.js",
@@ -20,6 +24,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@episteme/core": "*"
+    "@episteme/core": "*",
+    "@episteme/distillation": "*"
   }
 }

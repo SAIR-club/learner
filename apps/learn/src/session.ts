@@ -15,6 +15,7 @@ import {
   EDGE,
   HybridRetriever,
   NODE,
+  learnDomainPack,
   learnTags,
   retrieveWith,
   toAgentContext,
@@ -273,7 +274,7 @@ export class LearnSession {
 
     if (options.filePath === undefined) {
       const { compose } = await import('@episteme/sdk')
-      const episteme = compose({ actors, actorId: HUMAN })
+      const episteme = compose({ actors, actorId: HUMAN, packs: [learnDomainPack] })
       return new LearnSession(
         episteme,
         new HybridRetriever(
@@ -287,7 +288,11 @@ export class LearnSession {
     }
 
     const storage = await openLocalStorage(options.filePath)
-    const episteme = await openEpisteme(storage, { actors, actorId: HUMAN })
+    const episteme = await openEpisteme(storage, {
+      actors,
+      actorId: HUMAN,
+      packs: [learnDomainPack],
+    })
     return new LearnSession(
       episteme,
       new HybridRetriever(

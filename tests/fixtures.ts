@@ -19,7 +19,7 @@ import {
   openEpisteme as openViaSdk,
   type Episteme,
 } from '@episteme/sdk'
-import { retrieveRelevantContext, toAgentContext } from '@episteme/domain-learn'
+import { learnDomainPack, retrieveRelevantContext, toAgentContext } from '@episteme/domain-learn'
 import { MockCognitiveAgent, type AgentResponse } from '@episteme/agent'
 
 /**
@@ -67,7 +67,11 @@ export function createActors(now: () => number): {
 
 export function createFixture(startedAt = 0): EpistemeContext {
   const { human, agent, humanId, agentId } = createActors(() => startedAt)
-  const episteme = composeDeterministic(startedAt, { actors: [human, agent], actorId: humanId })
+  const episteme = composeDeterministic(startedAt, {
+    actors: [human, agent],
+    actorId: humanId,
+    packs: [learnDomainPack],
+  })
   return { ...episteme, human, agent, humanId, agentId }
 }
 
@@ -87,6 +91,7 @@ export async function openEpisteme(
     clock: createFixedClock(startedAt),
     actors: [human, agent],
     actorId: humanId,
+    packs: [learnDomainPack],
   })
   return { ...episteme, human, agent, humanId, agentId }
 }
