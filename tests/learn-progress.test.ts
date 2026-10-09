@@ -18,18 +18,24 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 let directory: string
 let filePath: string
+let openedSessions: LearnSession[] = []
 
 beforeEach(async () => {
+  openedSessions = []
   directory = await mkdtemp(join(tmpdir(), 'episteme-progress-'))
   filePath = join(directory, 'learn.jsonl')
 })
 
 afterEach(async () => {
+  for (const s of openedSessions) {
+    await s.close().catch(() => {})
+  }
   await rm(directory, { recursive: true, force: true })
 })
 
 async function session(): Promise<LearnSession> {
   const opened = await LearnSession.open({ filePath })
+  openedSessions.push(opened)
   await seedTopic(opened)
   return opened
 }
@@ -147,7 +153,9 @@ describe('it survives a restart like everything else', () => {
     await first.record('c_rope', { confidence: 'low' })
     const before = first.progress()
 
+    await first.close()
     const second = await LearnSession.open({ filePath })
+    openedSessions.push(second)
     const after = second.progress()
 
     expect(after.touched).toBe(before.touched)

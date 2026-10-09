@@ -248,13 +248,13 @@ export class LearnSession {
   readonly #episteme: Episteme
   readonly #retriever: Retriever
   readonly #agent = new MockCognitiveAgent({ responder: chineseLearnerResponder })
-  readonly #store: { save(state?: unknown): Promise<void> } | undefined
+  readonly #store: { save(state?: unknown): Promise<void>; close?(): Promise<void> } | undefined
   #saveChain: Promise<void> = Promise.resolve()
 
   private constructor(
     episteme: Episteme,
     retriever: Retriever,
-    store?: { save(state?: unknown): Promise<void> },
+    store?: { save(state?: unknown): Promise<void>; close?(): Promise<void> },
   ) {
     this.#episteme = episteme
     this.#retriever = retriever
@@ -299,6 +299,10 @@ export class LearnSession {
       ),
       storage,
     )
+  }
+
+  async close(): Promise<void> {
+    await this.#store?.close?.()
   }
 
   get actorId(): ActorId {

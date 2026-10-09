@@ -32,18 +32,25 @@ function collector(): { write(text: string): void; text(): string } {
   }
 }
 
+let openedClis: LearnCli[] = []
+
 async function openCli(): Promise<{ cli: LearnCli; out: ReturnType<typeof collector> }> {
   const out = collector()
   const cli = await LearnCli.open(out, { filePath })
+  openedClis.push(cli)
   return { cli, out }
 }
 
 beforeEach(async () => {
+  openedClis = []
   directory = await mkdtemp(join(tmpdir(), 'episteme-learn-'))
   filePath = join(directory, 'learn.jsonl')
 })
 
 afterEach(async () => {
+  for (const c of openedClis) {
+    await c.close().catch(() => {})
+  }
   await rm(directory, { recursive: true, force: true })
 })
 
@@ -175,6 +182,7 @@ describe('the loop survives closing the surface', () => {
     await first.cli.handle('claim order cannot be recovered from attention alone')
     await first.cli.handle('record claim_1 confidence medium')
     await first.cli.handle('record claim_1 articulation low')
+    await first.cli.close()
 
     // A second surface over the same file, with nothing carried in memory.
     const second = await openCli()
@@ -202,6 +210,7 @@ describe('the loop survives closing the surface', () => {
     const first = await openCli()
     await first.cli.handle('claim a deterministic claim')
     await first.cli.handle('record claim_1 confidence high')
+    await first.cli.close()
 
     const second = await openCli()
     const a = await first.cli.session.ask('is order hard for attention')

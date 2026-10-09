@@ -158,6 +158,10 @@ export class LearnCli {
     return this.#session
   }
 
+  async close(): Promise<void> {
+    await this.#session.close()
+  }
+
   /** Handles one line. Returns whether the session should continue. */
   async handle(line: string): Promise<boolean> {
     const trimmed = line.trim()
